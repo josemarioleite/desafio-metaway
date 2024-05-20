@@ -1,20 +1,12 @@
 <template>
 <div class="login">
-  <div class="login__describe">
-    <template>
-      <span>My</span>
-      <span>Diary</span>
-    </template>
-  </div>
-  <div class="login__auth">
-    <div class="login__auth__form">
-      <span class="login__auth__form--title">Entry</span>
-      <c-text v-model="username" label="Username" class="login__auth__form--input" :loading="isLoading" />
-      <c-text v-model="password" label="Username" class="login__auth__form--input" :loading="isLoading" />
-      <!-- <v-text-field v-model="username" variant="outlined" class="login__auth__form--input" label="username" :loading="isLoading" />
-      <v-text-field v-model="password" variant="outlined" class="login__auth__form--input" label="password" :loading="isLoading" /> -->
+  <div class="login__form">
+    <v-form>
+      <span class="login__form--title">Entry your login</span>
+      <c-text v-model="username" label="Usuário" :loading="isLoading" class="login__form--input" />
+      <c-text v-model="password" label="Senha" :loading="isLoading" class="login__form--input" type="password" />
       <v-btn color="primary" @click="login" :loading="isLoading">login</v-btn>
-    </div>
+    </v-form>
   </div>
 </div>
 </template>
@@ -50,73 +42,31 @@ async function login () {
 
 <style lang="scss" scoped>
 .login {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
   width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  &__describe, &__auth {
-    width: 50%;
-    height: 100%;
-  }
-
-  &__describe {
+  &__form {
+    border: 1px solid #808080;
+    border-radius: 10px;
+    width: 350px;
+    height: 450px;
+    
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    background: #196FB4;
-
-    span {
-      font-size: 5rem;
-      color: #fff;
-    }
-  }
-
-  &__auth {
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
 
-    &__form {
-      height: 60vh;
-      width: 60%;
-      border: 1px solid #808080;
-      border-radius: 10px;
-
-      display: flex;
-      // flex-direction: column;
-    //   justify-content: center;
-    //   align-items: center;
-    //   gap: 15px;
-
-    //   &--title {
-    //     font-size: 2rem;
-    //     color: #2196f3;
-    //   }
-
-    //   &--input {
-    //     width: 90%;
-    //   }
-    }
-  }
-}
-
-@media only screen and (max-width: 499px) {
-  .login {
-    display: flex;
-    flex-direction: column;
-
-    &__describe, &__auth {
-      width: 100%;
+    &--input {
+      width: 300px;
+      height: 70px;
+      margin-top: 10px;
     }
 
-    &__auth__form {
-      position: absolute;
-      top: 20%;
-      background: #FAFAFA;
-      width: 85%;
+    &--title {
+      color: #2a73c5;
+      font-size: 1.8rem;
     }
   }
 }

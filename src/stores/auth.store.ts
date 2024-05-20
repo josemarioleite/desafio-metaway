@@ -8,6 +8,7 @@ import { SwalAlert } from '../services/utils'
 const authClient = new AuthClient()
 
 export const AuthStore = defineStore('authStore', {
+  persist: true,
   state: () => ({
     isLogged: false,
     isLoading: false,
