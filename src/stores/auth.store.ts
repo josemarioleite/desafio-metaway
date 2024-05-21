@@ -1,7 +1,7 @@
 import route from '../router'
 
 import { defineStore } from 'pinia'
-import { Auth } from '../models/auth.model'
+import { Auth, AuthAccess } from '../models/auth.model'
 import { AuthClient } from '../services/http/login.http'
 import { SwalAlert } from '../services/utils'
 
@@ -12,7 +12,7 @@ export const AuthStore = defineStore('authStore', {
   state: () => ({
     isLogged: false,
     isLoading: false,
-    authAccess: {}
+    authAccess: {} as AuthAccess
   }),
   actions: {
     async authApp (auth: Auth) {

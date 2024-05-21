@@ -12,23 +12,22 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { Auth } from '../../models/auth.model'
 import { AuthStore } from '../../stores/auth.store'
-// import { useQuasar } from 'quasar'
-
-// const $q = useQuasar()
-// const isMobile = ref($q.platform.is.mobile)
+import { useRouter } from 'vue-router'
 
 defineOptions({
   name: 'Login'
 })
 
+const $router = useRouter()
 const username = ref<string>('marioleite')
 const password = ref<string>('9876543210')
 
 const authStore = AuthStore()
 const isLoading = computed(() => authStore.isLoading)
+const isLogged = computed(() => authStore.isLogged)
 
 async function login () {
   const authData: Auth = {
@@ -38,6 +37,12 @@ async function login () {
 
   await authStore.authApp(authData)
 }
+
+onMounted(() => {
+  if (isLogged) {
+    return $router.push({ name: 'home' })
+  }
+})
 </script>
 
 <style lang="scss" scoped>
