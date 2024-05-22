@@ -1,44 +1,45 @@
 <template>
-<div class="register">
-  <span class="title-page">Meu Cadastro</span>
+  <div class="register">
+    <span class="title-page">Meu Cadastro</span>
 
-  <v-form class="register__form">
-    <v-container>
-      <v-row>
-        <v-col md="3">
-          <c-text v-model="usuarioLogado.id" label="ID" readonly :loading="isLoading" :clearable="false" />
-        </v-col>
-        <v-col md="3">
-          <c-text v-model="permissaoUsuario" label="Permissão" readonly :loading="isLoading" :clearable="false" />
-        </v-col>
-        <v-col md="6">
-          <c-text v-model="usuarioLogado.nome" label="Nome" :loading="isLoading" />
-        </v-col>
-        <v-col md="4">
-          <c-text v-model.trim="usuarioLogado.cpf" label="CPF" :loading="isLoading" v-maska:[maskCPF] />
-        </v-col>
-        <v-col md="4">
-          <c-text v-model="usuarioLogado.dataNascimento" label="Data de Nascimento" :loading="isLoading" v-maska:[maskDate] />
-        </v-col>
-        <v-col md="4">
-          <c-text v-model="usuarioLogado.telefone" label="Contato" :loading="isLoading" v-maska:[maskTelephone] />
-        </v-col>
-        <v-col md="5">
-          <c-text v-model="usuarioLogado.username" label="Usuário" :loading="isLoading" />
-        </v-col>
-        <v-col md="7">
-          <c-text v-model="usuarioLogado.email" label="E-mail" :loading="isLoading" />
-        </v-col>
-      </v-row>
-      <div class="register__form__btn">
-        <v-btn @click="changePassword" color="black" :loading="isLoading">Alterar senha</v-btn>
-        <v-btn @click="updateUser" color="primary" :loading="isLoading">Alterar dados</v-btn>
-      </div>
-    </v-container>
-  </v-form>
-  <ChangePassword ref="changePW" @updatePage="updatePage" />
-</div>
+    <v-form class="register__form">
+      <v-container>
+        <v-row>
+          <v-col cols="12" md="3">
+            <c-text v-model="usuarioLogado.id" label="ID" readonly :loading="isLoading" :clearable="false" />
+          </v-col>
+          <v-col cols="12" md="3">
+            <c-text v-model="permissaoUsuario" label="Permissão" readonly :loading="isLoading" :clearable="false" />
+          </v-col>
+          <v-col cols="12" md="6">
+            <c-text v-model="usuarioLogado.nome" label="Nome" :loading="isLoading" />
+          </v-col>
+          <v-col cols="12" md="4">
+            <c-text v-model.trim="usuarioLogado.cpf" label="CPF" :loading="isLoading" v-maska:[maskCPF] />
+          </v-col>
+          <v-col cols="12" md="4">
+            <c-text v-model="usuarioLogado.dataNascimento" label="Data de Nascimento" :loading="isLoading" v-maska:[maskDate] />
+          </v-col>
+          <v-col cols="12" md="4">
+            <c-text v-model="usuarioLogado.telefone" label="Contato" :loading="isLoading" v-maska:[maskTelephone] />
+          </v-col>
+          <v-col cols="12" md="5">
+            <c-text v-model="usuarioLogado.username" label="Usuário" :loading="isLoading" />
+          </v-col>
+          <v-col cols="12" md="7">
+            <c-text v-model="usuarioLogado.email" label="E-mail" :loading="isLoading" />
+          </v-col>
+        </v-row>
+        <div class="register__form__btn">
+          <v-btn @click="changePassword" color="black" :loading="isLoading">Alterar senha</v-btn>
+          <v-btn @click="updateUser" color="primary" :loading="isLoading">Alterar dados</v-btn>
+        </div>
+      </v-container>
+    </v-form>
+    <ChangePassword ref="changePW" @updatePage="updatePage" />
+  </div>
 </template>
+
 
 <script lang="ts" setup>
 import { computed, onMounted, reactive, ref } from 'vue'
@@ -110,6 +111,10 @@ onMounted (async () => {
   .register {
     &__form {
       width: 100%;
+    }
+
+    &__form__btn {
+      justify-content: center;
     }
   }
 }
