@@ -4,7 +4,7 @@ export interface Auth {
 }
 
 export interface AuthAccess {
-  id: string
+  id: number
   username: string
   tipos: Array<string>
   accessToken: string
