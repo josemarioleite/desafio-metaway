@@ -24,8 +24,7 @@ export const AuthStore = defineStore('authStore', {
         this.authAccess = data
         this.isLogged = true
 
-        SwalAlert('Login efetuado com sucesso')
-          .then(() => route.push({ name: 'home' }))
+        route.push({ name: 'home' })
       } else {
         this.isLogged = false
       }
