@@ -52,12 +52,14 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(to right, #3844eb, #4f25b1);
 
   &__form {
     border: 1px solid #808080;
     border-radius: 10px;
     width: 350px;
     height: 450px;
+    background: #fff;
     
     display: flex;
     justify-content: center;
