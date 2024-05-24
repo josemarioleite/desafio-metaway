@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { PeopleClient } from '../services/http/people.http'
-import { sortByIdDesc } from '../services/utils'
+import { sortByIdDesc, SwalAlert } from '../services/utils'
+import { People, FileInfo } from '../models/people.model'
 
 const peopleClient = new PeopleClient()
 
@@ -13,6 +14,21 @@ export const PeopleStore = defineStore('peopleStore', {
     isLoading: false
   }),
   actions: {
+    async deletePeople (idPeople: number) {
+      return new Promise(async (resolve) => {
+        this.setLoading(true)
+
+        const { data, status } = await peopleClient.deletePeople(idPeople)
+
+        if (status === 200) { 
+          SwalAlert(data.message, 'Ok')
+          await this.getPeoples('')
+          resolve(true)
+        }
+
+        this.setLoading(false)
+      })
+    },
     async getPhoto (idPeople: number) {
       return new Promise(async (resolve) => {
         this.setLoading(true)
@@ -35,6 +51,25 @@ export const PeopleStore = defineStore('peopleStore', {
         if (status === 200) {
           this.itemsStore = sortByIdDesc(data) as any
           this.totalItemsStore = data.length
+        }
+
+        this.setLoading(false)
+        resolve(true)
+      })
+    },
+    async savePeople (people: People, file: FileInfo) {
+      return new Promise(async (resolve) => {
+        this.setLoading(true)
+
+        const { data, status } = await peopleClient.savePeople(people, file)
+
+        if (status === 200) {
+          SwalAlert(data.message, 'Ok')
+            .then(async (res) => {
+              if (res.isConfirmed) {
+                await this.getPeoples('')
+              }
+            })
         }
 
         this.setLoading(false)

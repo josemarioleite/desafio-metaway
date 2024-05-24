@@ -22,8 +22,8 @@ defineOptions({
 })
 
 const $router = useRouter()
-const username = ref<string>('marioleite')
-const password = ref<string>('9876543210')
+const username = ref<string>('')
+const password = ref<string>('')
 
 const authStore = AuthStore()
 const isLoading = computed(() => authStore.isLoading)

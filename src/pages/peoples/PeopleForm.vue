@@ -22,7 +22,6 @@
                   accept="image/*"
                   label="Sua foto"
                   :rules="[true]"
-                  @update:model-value="setFileInput"
                 />
               </div>
             </div>
@@ -58,7 +57,7 @@
             <c-text v-model="itemPeople.endereco.numero" label="Número" />
           </v-col>
           <v-col cols="12" md="2">
-            <c-text v-model="itemPeople.endereco.cep" label="CEP" />
+            <c-text v-model="itemPeople.endereco.cep" label="CEP" v-maska:[maskCEP] />
           </v-col>
         </v-row>
         <v-row>
@@ -86,8 +85,7 @@
 import { watch, computed, ref, reactive } from 'vue'
 import { ActionType } from './types'
 import { PeopleStore } from '../../stores/people.store'
-import { People, CreateEmptyPeople } from '../../models/people.model'
-import { generateUUID } from '../../services/utils'
+import { People, CreateEmptyPeople, FileInfo } from '../../models/people.model'
 
 interface Props {
   ItemPeople: People
@@ -95,27 +93,35 @@ interface Props {
   Type: ActionType
 }
 
-interface FileInfo {
-  lastModified: number
-  lastModifiedDate: Date
-  name: string
-  size: number
-  type: string
-  webkitRelativePath: string
-}
-
 let itemPeople = ref<People>(CreateEmptyPeople())
+
+
 const fileInput = ref(null)
 const maskCPF = reactive({ mask: '###.###.###-##', eager: true })
-const photo = computed(() => peopleStore.photoPeople)
+const maskCEP = reactive({ mask: '#####-##', eager: true })
+
+
 const peopleStore = PeopleStore()
+const photo = computed(() => peopleStore.photoPeople)
+
+
 const props = withDefaults(defineProps<Props>(), { Type: 'add' })
 const isVisible = computed(() => props.IsVisible)
 
 const emit = defineEmits(['show'])
 
 async function save () {
-  console.log(fileInput.value)
+  if (fileInput.value) {
+    const file = fileInput.value as any as FileInfo
+    const people = itemPeople.value as People
+
+    await peopleStore.savePeople(people, file)
+      .then(() => {
+        return emit('show', false)
+      })
+
+    return
+  }
 }
 
 async function closeForm () {
@@ -123,23 +129,11 @@ async function closeForm () {
   emit('show', false)
 }
 
-function setFileInput (value: FileInfo) {
-  if (value) {
-    itemPeople.value.foto.name = value.name
-    itemPeople.value.foto.type = value.type
-  } else {
-    itemPeople.value.foto.name = ''
-    itemPeople.value.foto.type = ''
-  }
-
-  console.log(itemPeople.value)
-}
-
 watch(isVisible, async function (value: any) {
   if (value && props.Type !== 'add') {
     itemPeople.value = props.ItemPeople
   } else {
-    itemPeople.value.foto.id = generateUUID()
+    fileInput.value = null
   }
 })
 </script>

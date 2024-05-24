@@ -31,7 +31,7 @@
 
         <v-tooltip text="Deletar">
           <template v-slot:activator="{ props }">
-            <v-btn v-bind="props" density="compact" icon="mdi-delete" color="red" />
+            <v-btn @click="deleteRow(item)" v-bind="props" density="compact" icon="mdi-delete" color="red" />
           </template>
         </v-tooltip>
       </div>
@@ -52,10 +52,14 @@ interface Props {
 defineProps<Props>()
 const itemsPerPage = ref(6)
 
-const emit = defineEmits(['editRow'])
+const emit = defineEmits(['editRow', 'deleteRow'])
 
 function editRow<T> (data: T) {
   emit('editRow', data)
+}
+
+function deleteRow<T> (data: T) {
+  emit('deleteRow', data)
 }
 </script>
 

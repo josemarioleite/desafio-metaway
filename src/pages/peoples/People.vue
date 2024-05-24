@@ -17,6 +17,7 @@
       :TotalItems="totalItems"
       :IsLoading="isLoading"
       @editRow="editPeople"
+      @deleteRow="deletePeople"
     />
     <c-float-button v-if="!showForm" @click="addPeople" />
   </div>
@@ -28,6 +29,7 @@ import { ref, onMounted, computed } from 'vue'
 import { PeopleStore } from '../../stores/people.store'
 import { People } from '../../models/people.model'
 import { ActionType } from './types'
+import { SwalConfirm } from '../../services/utils'
 import PeopleForm from './PeopleForm.vue'
 
 defineOptions({
@@ -63,11 +65,22 @@ function addPeople () {
 }
 
 async function editPeople (people: People) {
-  await peopleStore.getPhoto(people.id)
   ShowForm(false)
+
+  await peopleStore.getPhoto(people.id)
   typeForm.value = 'update'
   itemPeople = people
+
   ShowForm(true)
+}
+
+async function deletePeople (people: People) {
+  SwalConfirm(`Deseja realmente deletar: ${people.nome} ?`, 'Cuidado')
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        await peopleStore.deletePeople(people.id)
+      }
+    })
 }
 
 onMounted(async () => {

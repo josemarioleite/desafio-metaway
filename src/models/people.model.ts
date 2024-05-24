@@ -1,11 +1,17 @@
-import { generateUUID } from "../services/utils"
-
 export interface People {
   id: number
   nome: string
   cpf: string
   endereco: Endereco
-  foto: Foto
+}
+
+export interface FileInfo {
+  lastModified: number
+  lastModifiedDate: Date
+  name: string
+  size: number
+  type: string
+  webkitRelativePath: string
 }
 
 export interface Foto {
@@ -39,11 +45,6 @@ export function CreateEmptyPeople(): People {
       cidade: '',
       estado: '',
       pais: ''
-    },
-    foto: {
-      id: '',
-      name: '',
-      type: ''
     }
   }
 }
