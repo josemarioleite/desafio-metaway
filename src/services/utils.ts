@@ -36,3 +36,12 @@ export function isValidEmail(email: string): boolean {
 
   return emailRegex.test(email)
 }
+
+interface Item {
+  id: number
+  [key: string]: any
+}
+
+export function sortByIdDesc(items: Item[]) {
+  return items.sort((a, b) => b.id - a.id)
+}

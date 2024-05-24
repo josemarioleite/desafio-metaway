@@ -11,3 +11,28 @@ span {
   margin-top: 30px;
   margin-bottom: 50px;
 }
+
+/* Estilos gerais para navegadores baseados no WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 12px; /* Largura da scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #5b15ac; /* Cor do fundo da scrollbar */
+  border-radius: 10px; /* Borda arredondada */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Cor do polegar da scrollbar */
+  border-radius: 10px; /* Borda arredondada */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Cor do polegar da scrollbar ao passar o mouse */
+}
+
+/* Estilos para o Firefox */
+* {
+  scrollbar-width: thin; /* Largura da scrollbar: thin (fina) ou auto */
+  scrollbar-color: #386ed3 #f1f1f1; /* Cor do polegar da scrollbar e do fundo da scrollbar */
+}
