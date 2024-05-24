@@ -37,7 +37,7 @@ export abstract class HttpCliente {
         SwalAlert('Erro nas credenciais')
           .then(() => {
             localStorage.clear()
-            router.push({ name: 'login' })
+            window.location.reload()
           })
       }
 
