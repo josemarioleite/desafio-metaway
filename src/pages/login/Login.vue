@@ -2,7 +2,7 @@
 <div class="login">
   <div class="login__form">
     <v-form>
-      <span class="login__form--title">Entry your login</span>
+      <span class="login__form--title">Faça o login</span>
       <c-text v-model="username" label="Usuário" :loading="isLoading" class="login__form--input" />
       <c-text v-model="password" label="Senha" :loading="isLoading" class="login__form--input" type="password" />
       <v-btn color="primary" @click="login" :loading="isLoading">login</v-btn>
