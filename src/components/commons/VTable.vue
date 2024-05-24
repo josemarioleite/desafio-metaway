@@ -3,11 +3,21 @@
     :headers="Headers"
     :items="Items"
     :items-per-page="itemsPerPage"
+    :search="search"
     class="table"
     item-value="name"
     items-per-page-text="Itens por página:"
     no-data-text="Sem dados no momento..."
   >
+    <template v-if="ShowSearch" v-slot:top>
+      <c-text
+        v-model="search"
+        label="Pesquisar nome"
+        density="compact"
+        class="search"
+      />
+    </template>
+  
     <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
       <tr class="table__header">
         <template v-for="column in columns" :key="column.key">
@@ -47,11 +57,15 @@ interface Props {
   Items: []
   TotalItems: 0
   IsLoading: false
+  ShowSearch: false
 }
 
-defineProps<Props>()
-const itemsPerPage = ref(6)
+withDefaults(defineProps<Props>(), {
+  ShowSearch: false
+})
 
+const search = ref('')
+const itemsPerPage = ref(5)
 const emit = defineEmits(['editRow', 'deleteRow'])
 
 function editRow<T> (data: T) {
@@ -66,7 +80,7 @@ function deleteRow<T> (data: T) {
 <style lang="scss" scoped>
 .table {
   width: 95%;
-  height: 450px;
+  height: 500px;
   border: 1px solid #ccc;
   border-radius: 10px;
 
@@ -86,6 +100,12 @@ function deleteRow<T> (data: T) {
       font-weight: 600;
     }
   }
+}
 
+.search {
+  width: 350px;
+  max-height: 50px;
+  margin: 10px;
+  display: block;
 }
 </style>
