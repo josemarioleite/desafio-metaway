@@ -65,7 +65,7 @@ withDefaults(defineProps<Props>(), {
 })
 
 const search = ref('')
-const itemsPerPage = ref(5)
+const itemsPerPage = ref(6)
 const emit = defineEmits(['editRow', 'deleteRow'])
 
 function editRow<T> (data: T) {
