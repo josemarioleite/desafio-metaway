@@ -16,6 +16,7 @@
       :Items="items"
       :TotalItems="totalItems"
       :IsLoading="isLoading"
+      :ShowSearch="true"
       @editRow="editPeople"
       @deleteRow="deletePeople"
     />
@@ -43,6 +44,7 @@ const items = computed(() => peopleStore.itemsStore)
 const isLoading = computed(() => peopleStore.isLoading)
 
 let itemPeople = {}
+
 const typeForm = ref<ActionType>('add')
 const showForm = ref(false)
 const headers = ref([
@@ -51,7 +53,6 @@ const headers = ref([
   { title: 'CPF', align: 'center', key: 'cpf' },
   { title: 'Ação', align: 'center', key: 'action' }
 ])
-
 
 function ShowForm (value: boolean) {
   showForm.value = value
