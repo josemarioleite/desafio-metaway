@@ -45,6 +45,18 @@ export class PeopleClient extends HttpCliente {
     }
   }
 
+  public readonly updatePeople = async (people: People): Promise<AxiosResponse> => {
+    try {
+      const result: AxiosResponse = await this.instance.post('pessoa/salvar', people)
+
+      return result
+    } catch (error: any) {
+      const errorAxios = error.response as AxiosResponse
+
+      return errorAxios
+    }
+  }
+
   public readonly savePeople = async (people: People, file: any): Promise<AxiosResponse> => {
     try {
       const result: AxiosResponse = await this.instance.post('pessoa/salvar', people)

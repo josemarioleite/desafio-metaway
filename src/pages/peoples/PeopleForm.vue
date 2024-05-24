@@ -31,7 +31,7 @@
               <v-col cols="12" md="2" v-if="Type !== 'add'">
                 <c-text v-model="itemPeople.id" label="ID" readonly :clearable="false" />
               </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <c-text v-model="itemPeople.nome" label="Nome" />
               </v-col>
               <v-col cols="12" md="4">
@@ -111,6 +111,14 @@ const isVisible = computed(() => props.IsVisible)
 const emit = defineEmits(['show'])
 
 async function save () {
+  if (props.Type === 'update') {
+    await peopleStore.updatePeople(itemPeople.value)
+      .then(() => {
+        emit('show', false)
+      })
+    return
+  }
+
   if (fileInput.value) {
     const file = fileInput.value as any as FileInfo
     const people = itemPeople.value as People

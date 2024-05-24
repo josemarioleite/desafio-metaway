@@ -76,6 +76,23 @@ export const PeopleStore = defineStore('peopleStore', {
         resolve(true)
       })
     },
+    async updatePeople (people: People) {
+      return new Promise(async (resolve) => {
+        this.setLoading(true)
+
+        const { data, status } = await peopleClient.updatePeople(people)
+
+        if (status === 200) {
+          SwalAlert(data.message, 'Ok')
+            .then(async () => {
+              await this.getPeoples('')
+            })
+        }
+
+        this.setLoading(false)
+        resolve(true)
+      })
+    },
     setPhotoEmpty () {
       this.photoPeople = ''
     },
