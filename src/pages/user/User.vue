@@ -1,6 +1,6 @@
 <template>
 <div class="user">
-  <span class="title-page">Lista de Usuários (Em Desenvolvimento)</span>
+  <span class="title-page">Lista de Usuários</span>
 
   <UserForm
     :ItemUser="itemUser"
