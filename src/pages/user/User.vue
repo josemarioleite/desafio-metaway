@@ -64,10 +64,10 @@ function addUser () {
 
 async function editUser (user: User) {
   ShowForm(false)
-
+  
   typeForm.value = 'update'
   itemUser = user
-
+    
   ShowForm(true)
 }
 
@@ -95,7 +95,6 @@ onMounted(async () => {
     width: 100%;
 
     &--component {
-      height: 435px;
       width: 95%;
     }
   }

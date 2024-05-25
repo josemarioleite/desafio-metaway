@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { User } from '../models/user.model'
+import { User, UserDetail, CreateEmptyUser } from '../models/user.model'
 import { UserClient } from '../services/http/user.http'
 import { AuthStore } from './auth.store'
-import { SwalAlert, formatDate, isValidEmail } from '../services/utils'
+import { SwalAlert, formatDate, isValidEmail, sortByIdDesc } from '../services/utils'
 
 const userClient = new UserClient()
 
@@ -11,19 +11,22 @@ export const UserStore = defineStore('userStore', {
   state: () => ({
     items: [],
     permissoes: [] as Array<string>,
+    user: {} as UserDetail,
     usuarioLogado: {} as User,
     isLoading: false
   }),
   actions: {
-    async getUserById () {
+    async getDetailUserLogged () {
       this.setLoading(true)
       
       const authStore = AuthStore()
-      const data = await userClient.getUser(authStore.authAccess.id)
+      const { data, status } = await userClient.getUser(authStore.authAccess.id)
 
-      this.permissoes = data.tipos
-      this.usuarioLogado = data.usuario
-      this.usuarioLogado.dataNascimento = formatDate(data.usuario.dataNascimento, false)
+      if (status === 200) {
+        this.permissoes = data.tipos
+        this.usuarioLogado = data.usuario
+        this.usuarioLogado.dataNascimento = formatDate(data.usuario.dataNascimento, false)
+      }
 
       this.setLoading(false)
     },
@@ -52,7 +55,7 @@ export const UserStore = defineStore('userStore', {
           await userClient.updateUser(user)
         }
 
-        await this.getUserById()
+        await this.getDetailUserLogged()
         resolve(true)
       })
     },
@@ -63,7 +66,7 @@ export const UserStore = defineStore('userStore', {
         const { data, status } = await userClient.getUsers(termo)
 
         if (status === 200) {
-          this.items = data
+          this.items = sortByIdDesc(data) as any
           this.setLoading(false)
           return resolve(true)
         }
@@ -71,8 +74,46 @@ export const UserStore = defineStore('userStore', {
         return resolve(false)
       })
     },
+    async saveUser (user: UserDetail) {
+      return new Promise(async (resolve) => {
+        this.setLoading(true)
+
+        const { data, status } = await userClient.saveUser(user)
+
+        if (status === 200) {
+          SwalAlert(data.message, 'Ok')
+            .then(() => {
+              this.getAllUsers('')
+            })
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+
+        this.setLoading(false)
+      })
+    },
+    async getUserById (idUser: number) {
+      return new Promise(async (resolve) => {
+        this.setLoading(true)
+      
+        const { data, status } = await userClient.getUser(idUser)
+
+        if (status === 200) {
+          this.user = data.object
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+
+        this.setLoading(false)
+      })
+    },
     setLoading (value: boolean) {
       return this.isLoading = value
+    },
+    setUserDefault () {
+      this.user = CreateEmptyUser()
     }
   }
 })

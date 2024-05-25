@@ -67,7 +67,7 @@ withDefaults(defineProps<Partial<Props>>(), {
 })
 
 const search = ref('')
-const itemsPerPage = ref(6)
+const itemsPerPage = ref(5)
 const emit = defineEmits(['editRow', 'deleteRow'])
 
 function editRow<T> (data: T) {
@@ -82,7 +82,7 @@ function deleteRow<T> (data: T) {
 <style lang="scss" scoped>
 .table {
   width: 95%;
-  height: 500px;
+  height: 450px;
   border: 1px solid #ccc;
   border-radius: 10px;
 
