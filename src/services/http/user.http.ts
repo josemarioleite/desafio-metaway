@@ -42,4 +42,16 @@ export class UserClient extends HttpCliente {
       return errorAxios
     }
   }
+
+  public readonly getUsers = async (termo: string): Promise<AxiosResponse> => {
+    try {
+      const result: AxiosResponse = await this.instance.post('usuario/pesquisar', {termo})
+
+      return result
+    } catch (error: any) {
+      const errorAxios = error.response as AxiosResponse
+
+      return errorAxios
+    }
+  }
 }

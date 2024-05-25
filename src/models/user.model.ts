@@ -14,3 +14,16 @@ export interface UserChangePassword {
   password: string
   username: string
 }
+
+export function CreateEmptyUser(): User {
+  return {
+    id: 0,
+    nome: '',
+    cpf: '',
+    dataNascimento: '',
+    email: '',
+    password: '',
+    telefone: '',
+    username: ''
+  }
+}

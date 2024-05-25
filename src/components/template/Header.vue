@@ -55,8 +55,8 @@ const isAdmin = authAccess.value.tipos.includes('ROLE_ADMIN')
 
 const optionsMain: Array<OptionsMain> = [
   { show: true, title: 'Home', goTo: 'home' },
-  { show: isAdmin, title: 'Usuários', goTo: 'user' },
   { show: true, title: 'Contatos', goTo: 'contact' },
+  { show: isAdmin, title: 'Usuários', goTo: 'user' },
   { show: true, title: 'Pessoas', goTo: 'people' },
   { show: true, title: 'Cadastro', goTo: 'register' },
   { show: true, title: 'Sair', goTo: null }
