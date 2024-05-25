@@ -12,7 +12,7 @@
     <template v-if="ShowSearch" v-slot:top>
       <c-text
         v-model="search"
-        label="Pesquisar nome"
+        label="Pesquisar"
         density="compact"
         class="search"
       />
@@ -39,7 +39,7 @@
           </template>
         </v-tooltip>
 
-        <v-tooltip text="Deletar">
+        <v-tooltip v-if="ShowDeleteButton" text="Deletar">
           <template v-slot:activator="{ props }">
             <v-btn @click="deleteRow(item)" v-bind="props" density="compact" icon="mdi-delete" color="red" />
           </template>
@@ -58,10 +58,12 @@ interface Props {
   TotalItems: 0
   IsLoading: false
   ShowSearch: false
+  ShowDeleteButton: true
 }
 
-withDefaults(defineProps<Props>(), {
-  ShowSearch: false
+withDefaults(defineProps<Partial<Props>>(), {
+  ShowSearch: false,
+  ShowDeleteButton: true
 })
 
 const search = ref('')

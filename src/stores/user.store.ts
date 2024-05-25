@@ -9,6 +9,7 @@ const userClient = new UserClient()
 export const UserStore = defineStore('userStore', {
   persist: true,
   state: () => ({
+    items: [],
     permissoes: [] as Array<string>,
     usuarioLogado: {} as User,
     isLoading: false
@@ -53,6 +54,21 @@ export const UserStore = defineStore('userStore', {
 
         await this.getUserById()
         resolve(true)
+      })
+    },
+    async getAllUsers (termo: string) {
+      return new Promise(async (resolve) => {
+        this.setLoading(true)
+
+        const { data, status } = await userClient.getUsers(termo)
+
+        if (status === 200) {
+          this.items = data
+          this.setLoading(false)
+          return resolve(true)
+        }
+
+        return resolve(false)
       })
     },
     setLoading (value: boolean) {

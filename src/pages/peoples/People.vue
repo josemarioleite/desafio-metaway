@@ -3,7 +3,6 @@
   <span class="title-page">Lista de Pessoas</span>
 
   <PeopleForm
-    v-show="showForm"
     :ItemPeople="itemPeople"
     :Type="typeForm"
     :IsVisible="showForm"

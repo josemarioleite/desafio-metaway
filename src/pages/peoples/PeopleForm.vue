@@ -1,5 +1,5 @@
 <template>
-<div class="form" transition="scroll-x-transition">
+<div v-if="IsVisible" class="form" transition="scroll-x-transition">
   <aside class="form__aside">
     <span class="form__aside--subtitle">Dados</span>
     <v-form>
