@@ -23,9 +23,9 @@ export const UserStore = defineStore('userStore', {
       const { data, status } = await userClient.getUser(authStore.authAccess.id)
 
       if (status === 200) {
-        this.permissoes = data.tipos
-        this.usuarioLogado = data.usuario
-        this.usuarioLogado.dataNascimento = formatDate(data.usuario.dataNascimento, false)
+        this.permissoes = data.object.tipos
+        this.usuarioLogado = data.object.usuario
+        this.usuarioLogado.dataNascimento = formatDate(data.object.usuario.dataNascimento, false)
       }
 
       this.setLoading(false)
@@ -78,6 +78,7 @@ export const UserStore = defineStore('userStore', {
       return new Promise(async (resolve) => {
         this.setLoading(true)
 
+        user.usuario.dataNascimento = formatDate(user.usuario.dataNascimento as any, true)
         const { data, status } = await userClient.saveUser(user)
 
         if (status === 200) {
@@ -101,6 +102,7 @@ export const UserStore = defineStore('userStore', {
 
         if (status === 200) {
           this.user = data.object
+          this.user.usuario.dataNascimento = formatDate(this.user.usuario.dataNascimento as any, false)
           resolve(true)
         } else {
           resolve(false)

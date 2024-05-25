@@ -62,7 +62,7 @@ import { SwalConfirm } from '../../services/utils'
 
 const userStore = UserStore()
 
-const maskDate = reactive({ mask: '####-##-##', eager: true })
+const maskDate = reactive({ mask: '##/##/####', eager: true })
 const maskTelephone = reactive({ mask: '(##)#####-####', eager: true })
 const maskCPF = reactive({ mask: '###.###.###-##', eager: true })
 
