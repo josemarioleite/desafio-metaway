@@ -9,21 +9,28 @@ export interface User {
   password: string
 }
 
+export interface UserDetail {
+  tipos: string[]
+  usuario: Partial<User>
+}
+
 export interface UserChangePassword {
   newPassword: string
   password: string
   username: string
 }
 
-export function CreateEmptyUser(): User {
+export function CreateEmptyUser(): UserDetail {
   return {
-    id: 0,
-    nome: '',
-    cpf: '',
-    dataNascimento: '',
-    email: '',
-    password: '',
-    telefone: '',
-    username: ''
+    tipos: [''],
+    usuario: {
+      nome: '',
+      cpf: '',
+      dataNascimento: '',
+      email: '',
+      password: '',
+      telefone: '',
+      username: ''
+    }
   }
 }

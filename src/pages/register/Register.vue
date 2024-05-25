@@ -69,7 +69,7 @@ async function updateUser () {
 }
 
 async function updatePage () {
-  await userStore.getUserById()
+  await userStore.getDetailUserLogged()
 }
 
 function changePassword () {
