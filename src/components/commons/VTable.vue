@@ -67,7 +67,7 @@ withDefaults(defineProps<Partial<Props>>(), {
 })
 
 const search = ref('')
-const itemsPerPage = ref(5)
+const itemsPerPage = ref(10)
 const emit = defineEmits(['editRow', 'deleteRow'])
 
 function editRow<T> (data: T) {
@@ -109,5 +109,11 @@ function deleteRow<T> (data: T) {
   max-height: 50px;
   margin: 10px;
   display: block;
+}
+
+@media only screen and (max-width: 499px) {
+  .table {
+    height: 550px;
+  }
 }
 </style>

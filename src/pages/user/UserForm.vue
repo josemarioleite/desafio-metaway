@@ -31,15 +31,11 @@
             <c-text v-model="user.usuario.password" label="Senha" :loading="isLoading" />
           </v-col>
           <v-col cols="12" md="2">
-            <v-select
+            <c-select
               v-model="user.tipos"
-              label="Permissão"
-              :items="optionsRole"
-              item-title="label"
+              :Items="optionsRole"
+              Label="Permissão"
               item-value="value"
-              variant="outlined"
-              density="comfortable"
-              class="select"
             />
           </v-col>
         </v-row>

@@ -42,7 +42,11 @@ export abstract class HttpCliente {
       }
 
       if (reject.response && reject.response.status === 400) {
-        SwalAlert(reject.response.data.message)
+        SwalAlert(reject.response.data.message, 'Requisição sem sucesso')
+      }
+
+      if (reject.response && reject.response.status === 500) {
+        SwalAlert(reject.response.data.message, 'Erro Interno')
       }
 
       return reject
