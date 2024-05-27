@@ -9,6 +9,7 @@ export const ContactStore = defineStore('contactStore', {
   persist: true,
   state: () => ({
     contact: {} as Contato,
+    favorites: [],
     items: [],
     isLoading: false
   }),
@@ -55,6 +56,39 @@ export const ContactStore = defineStore('contactStore', {
         if (status === 200) {
           SwalAlert(data.message, 'Ok')
           await this.getAll('')
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+
+        this.setLoading(false)
+      })
+    },
+    async favoriteContact (contato: Contato) {
+      return new Promise(async (resolve) => {
+        this.setLoading(true)
+      
+        const { data, status } = await contactClient.favoriteContact(contato)
+
+        if (status === 200) {
+          SwalAlert(data.message, 'Ok')
+          await this.getAll('')
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+
+        this.setLoading(false)
+      })
+    },
+    async getFavorites () {
+      return new Promise(async (resolve) => {
+        this.setLoading(true)
+      
+        const { data, status } = await contactClient.getFavorites()
+
+        if (status === 200) {
+          this.favorites = data
           resolve(true)
         } else {
           resolve(false)

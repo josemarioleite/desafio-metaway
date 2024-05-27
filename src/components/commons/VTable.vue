@@ -44,6 +44,12 @@
             <v-btn @click="deleteRow(item)" v-bind="props" density="compact" icon="mdi-delete" color="red" />
           </template>
         </v-tooltip>
+
+        <v-tooltip v-if="ShowFavorite" text="Favoritar">
+          <template v-slot:activator="{ props }">
+            <v-btn @click="favoriteRow(item)" v-bind="props" density="compact" icon="mdi-star" color="yellow-accent-4" />
+          </template>
+        </v-tooltip>
       </div>
     </template>
   </v-data-table>
@@ -58,17 +64,19 @@ interface Props {
   TotalItems: 0
   IsLoading: false
   ShowSearch: false
+  ShowFavorite: false
   ShowDeleteButton: true
 }
 
 withDefaults(defineProps<Partial<Props>>(), {
   ShowSearch: false,
+  ShowFavorite: false,
   ShowDeleteButton: true
 })
 
 const search = ref('')
 const itemsPerPage = ref(10)
-const emit = defineEmits(['editRow', 'deleteRow'])
+const emit = defineEmits(['editRow', 'deleteRow', 'favoriteRow'])
 
 function editRow<T> (data: T) {
   emit('editRow', data)
@@ -76,6 +84,10 @@ function editRow<T> (data: T) {
 
 function deleteRow<T> (data: T) {
   emit('deleteRow', data)
+}
+
+function favoriteRow<T> (data: T) {
+  emit('favoriteRow', data)
 }
 </script>
 
