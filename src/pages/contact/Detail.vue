@@ -7,12 +7,12 @@
   <aside class="detail__aside">
     <v-form>
       <v-row class="justify-center">
-        <v-col v-if="Item.id > 0" cols="12" md="1">
-          <c-text v-model="Item.id" label="ID" readonly :clearable="false" />
+        <v-col v-if="contact.id > 0" cols="12" md="1">
+          <c-text v-model="contact.id" label="ID" readonly :clearable="false" />
         </v-col>
         <v-col cols="12" md="4">
           <c-select
-            v-model="Item.pessoa"
+            v-model="contact.pessoa"
             :Items="itemsPeople"
             Label="Pessoa"
             item-title="nome"
@@ -21,7 +21,7 @@
         </v-col>
         <v-col cols="12" md="4">
           <c-select
-            v-model="Item.usuario"
+            v-model="contact.usuario"
             :Items="itemsUser"
             Label="Usuário"
             item-title="nome"
@@ -29,7 +29,7 @@
           />
         </v-col>
         <v-col cols="12" md="3">
-          <c-text v-model="Item.tag" label="Tag" />
+          <c-text v-model="contact.tag" label="Tag" />
         </v-col>
       </v-row>
     </v-form>
@@ -37,19 +37,19 @@
     <v-row class="justify-center">
       <v-col cols="12" md="2">
         <c-select
-          v-model="Item.privado"
+          v-model="contact.privado"
           :Items="optionsPrivate"
           Label="Privado"
         />
       </v-col>
       <v-col cols="12" md="2">
-        <c-select v-model="Item.tipoContato" :Items="optionsTipoContato" Label="Tipo do contato" />
+        <c-select v-model="contact.tipoContato" :Items="optionsTipoContato" Label="Tipo do contato" />
       </v-col>
       <v-col cols="12" md="5">
-        <c-text v-model="Item.email" label="E-mail" />
+        <c-text v-model="contact.email" label="E-mail" />
       </v-col>
       <v-col cols="12" md="2">
-        <c-text v-model="Item.telefone" label="Celular/Telefone" v-maska:[maskTelephone] />
+        <c-text v-model="contact.telefone" label="Celular/Telefone" v-maska:[maskTelephone] />
       </v-col>
     </v-row>
   </aside>
@@ -66,54 +66,79 @@ import { onMounted, computed, ref, reactive, watch } from 'vue'
 import { PeopleStore } from '../../stores/people.store'
 import { UserStore } from '../../stores/user.store'
 import { ContactStore } from '../../stores/contact.store'
-import { SwalConfirm } from '../../services/utils'
-import { Contato } from '../../models/contact.model'
+import { SwalAlert, SwalConfirm, isValidEmail } from '../../services/utils'
+import { Contato, CreateEmptyContact } from '../../models/contact.model'
 
 interface Props {
-  Item: Contato
   Show: boolean
 }
 
+const maskTelephone = reactive({ mask: ['(##)#####-####', '(##)####-####'], eager: true })
 const props = withDefaults(defineProps<Props>(), {
   Show: false
 })
 
+const isVisible = computed(() => props.Show)
 const optionsTipoContato = ref([
 { label: 'E-mail', value: 'EMAIL' },
 { label: 'Celular', value: 'CELULAR' },
 { label: 'Telefone', value: 'TELEFONE' }
 ])
-
 const optionsPrivate = ref([
   { label: 'Não', value: false },
   { label: 'Sim', value: true }
 ])
 
 const userStore = UserStore()
-const peopleStore = PeopleStore()
-const contactStore = ContactStore()
-
-const itemsPeople = computed(() => peopleStore.itemsStore)
 const itemsUser = computed(() => userStore.items)
 
-const maskTelephone = reactive({ mask: ['(##)#####-####', '(##)####-####'], eager: true })
+const peopleStore = PeopleStore()
+const itemsPeople = computed(() => peopleStore.itemsStore)
 
-const contact = computed(() => props.Item)
+const contactStore = ContactStore()
+const contact = computed(() => contactStore.contact)
 
 const emit = defineEmits(['show'])
 const closeDetail = () => {
   emit('show', false)
 }
 
-const save = async () => {
-  SwalConfirm('Podemos prosseguir ?')
-    .then(async (result) => {
-      if (result.isConfirmed) {
-        await contactStore.saveContact(contact.value)
-          .then(() => emit('show', false))
-      }
-    })
+function validFields (): boolean {
+  const tipoContato = contact.value.tipoContato
+
+  if (tipoContato === 'EMAIL') {
+    const email = contact.value.email
+
+    if (!isValidEmail(email)) {
+      SwalAlert('E-mail não válido', 'Atenção')
+      return false
+    }
+  }
+
+  return true
 }
+
+const save = async () => {
+  if (validFields()) {
+    SwalConfirm('Podemos prosseguir ?')
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          await contactStore.saveContact()
+            .then((res) => {
+              if (res) emit('show', false)
+            })
+        }
+      })
+  }
+}
+
+watch(isVisible, function (value) {
+  if (value) {
+    if (!contact.value) {
+      contact.value = CreateEmptyContact()
+    }
+  }
+})
 
 onMounted(async () => {
   await Promise.all([

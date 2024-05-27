@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ContactClient } from '../services/http/contact.http'
-import { SwalAlert, sortByIdDesc, isValidEmail } from '../services/utils'
-import { Contato } from '../models/contact.model'
+import { SwalAlert, sortByIdDesc } from '../services/utils'
+import { Contato, CreateEmptyContact } from '../models/contact.model'
 
 const contactClient = new ContactClient()
 
@@ -46,16 +46,11 @@ export const ContactStore = defineStore('contactStore', {
         this.setLoading(false)
       })
     },
-    async saveContact (contato: Contato) {
+    async saveContact () {
       return new Promise(async (resolve) => {
         this.setLoading(true)
-
-        if (!isValidEmail(contato.email)) {
-          SwalAlert('E-mail não é válido', 'Atenção')
-          resolve(false)
-        }
       
-        const { data, status } = await contactClient.saveContact(contato)
+        const { data, status } = await contactClient.saveContact(this.contact)
 
         if (status === 200) {
           SwalAlert(data.message, 'Ok')
@@ -70,6 +65,13 @@ export const ContactStore = defineStore('contactStore', {
     },
     setLoading (value: boolean) {
       return this.isLoading = value
+    },
+    setContact (value: Contato | null = null) {
+      if (value) {
+        return this.contact = value
+      }
+
+      return this.contact = CreateEmptyContact()
     }
   }
 })

@@ -3,7 +3,6 @@
   <span class="title-page">Lista de Contatos</span>
 
   <Detail
-    :Item="contact"
     :Show="showDetail"
     @show="ShowForm"
   />
@@ -29,7 +28,6 @@ import { onMounted, computed, ref } from 'vue'
 import { ContactStore } from '../../stores/contact.store'
 import { SwalConfirm } from '../../services/utils'
 import { Contato } from '../../models/contact.model'
-import { ActionType } from '../user/types'
 import Detail from './Detail.vue'
 
 const contactStore = ContactStore()
@@ -37,8 +35,6 @@ const items = computed(() => contactStore.items)
 const totalItems = computed(() => items.value.length)
 const isLoading = computed(() => contactStore.isLoading)
 
-let contact = {}
-const typeForm = ref<ActionType>('add')
 const showDetail = ref(false)
 const headers = ref([
   { title: 'ID', align: 'right', key: 'id' },
@@ -56,22 +52,21 @@ function ShowForm (value: boolean = false) {
 }
 
 function addContact () {
-  contact = {}
-  typeForm.value = 'add'
+  contactStore.setContact(null)
 
   ShowForm(true)
 }
 
 function editContact (contato: Contato) {
   ShowForm(false)
-
-  typeForm.value = 'update'
-  contact = contato
+  contactStore.setContact(contato)
 
   ShowForm(true)
 }
 
 const deleteContact = async ({id}: number) => {
+  ShowForm(false)
+
   SwalConfirm('Deseja realmente deletar esse contato ?', 'Atenção')
     .then(async (result) => {
       if (result.isConfirmed) {
