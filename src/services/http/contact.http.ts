@@ -45,4 +45,28 @@ export class ContactClient extends HttpCliente {
       return errorAxios
     }
   }
+
+  public readonly getFavorites = async (): Promise<AxiosResponse> => {
+    try {
+      const result: AxiosResponse = await this.instance.get('favorito/pesquisar')
+
+      return result
+    } catch (error: any) {
+      const errorAxios = error.response as AxiosResponse
+
+      return errorAxios
+    }
+  }
+
+  public readonly favoriteContact = async (contato: Contato): Promise<AxiosResponse> => {
+    try {
+      const result: AxiosResponse = await this.instance.post('favorito/salvar', contato)
+
+      return result
+    } catch (error: any) {
+      const errorAxios = error.response as AxiosResponse
+
+      return errorAxios
+    }
+  }
 }

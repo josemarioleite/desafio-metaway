@@ -14,8 +14,10 @@
       :TotalItems="totalItems"
       :IsLoading="isLoading"
       :ShowSearch="true"
+      :ShowFavorite="true"
       @editRow="editContact"
       @deleteRow="deleteContact"
+      @favoriteRow="favoriteContact"
     />
   </div>
 
@@ -62,6 +64,17 @@ function editContact (contato: Contato) {
   contactStore.setContact(contato)
 
   ShowForm(true)
+}
+
+async function favoriteContact (contato: Contato) {
+  ShowForm(false)
+
+  SwalConfirm('Deseja favoritar este contato ?', 'Atenção')
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        await contactStore.favoriteContact(contato)
+      }
+    })
 }
 
 const deleteContact = async ({id}: number) => {
