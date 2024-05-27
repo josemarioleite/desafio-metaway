@@ -9,8 +9,8 @@
     <span>{{ contact.pessoa.nome }}</span>
   </div>
   <div class="card-contact__footer">
-    <!-- <span>Tag: {{ contact.tag }}</span> -->
     <span>Tipo: {{ traduzirContato(contact.tipoContato) }}</span>
+    <span>{{ contact.tag }}</span>
   </div>
 </div>
 </template>
@@ -56,8 +56,8 @@ onMounted(() => {
 }
 
 .card-contact {
-  height: 150px;
-  width: 100px;
+  height: 220px;
+  width: 150px;
 
   display: flex;
   justify-content: center;
@@ -70,12 +70,14 @@ onMounted(() => {
     }
   }
 
-  &__aside {font-size: 1.2rem;
+  &__aside {
+    font-size: 1.2rem;
     margin-top: 10px;
-    height: 75px;
     width: 125px;
+    height: 35px;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 
     span {
       font-size: 1.3rem;
@@ -83,6 +85,10 @@ onMounted(() => {
   }
 
   &__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
     span {
       font-size: .9rem;
     }
