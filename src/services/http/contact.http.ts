@@ -69,4 +69,16 @@ export class ContactClient extends HttpCliente {
       return errorAxios
     }
   }
+
+  public readonly deleteFavorite = async (idContact: number): Promise<AxiosResponse> => {
+    try {
+      const result: AxiosResponse = await this.instance.delete(`favorito/remover/${idContact}`)
+
+      return result
+    } catch (error: any) {
+      const errorAxios = error.response as AxiosResponse
+
+      return errorAxios
+    }
+  }
 }

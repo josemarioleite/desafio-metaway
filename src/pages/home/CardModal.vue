@@ -1,5 +1,5 @@
 <template>
-<v-dialog v-model="dialog" persistent style="width: 450px" :fullscreen="smAndDown">
+<v-dialog v-model="dialog" persistent :style="!smAndDown ? 'width: 450px;' : ''" :fullscreen="smAndDown">
   <v-card class="modal">
     <div class="modal__header">
       <span>Detalhes</span>
@@ -52,6 +52,12 @@
               <c-read Subtitle="Celular/Telefone" :Content="contato.telefone" />
             </v-col>
           </v-row>
+
+          <v-row>
+            <v-col v-if="typeModal === 'FAV'" cols="12">
+              <v-btn @click="deleteFavorite" color="#DAA619">Desfavoritar</v-btn>
+            </v-col>
+          </v-row>
         </v-container>
       </v-form>
     </div>
@@ -73,9 +79,11 @@
 import { defineComponent } from 'vue'
 import { Contato } from '../../models/contact.model'
 import { PeopleClient } from '../../services/http/people.http'
+import { ContactStore } from '../../stores/contact.store'
 import { TypeModal } from './ITypes'
 import { AxiosResponse } from 'axios'
 import { useDisplay } from 'vuetify'
+import { SwalConfirm } from '../../services/utils'
 
 export default defineComponent({
   name: 'CardModal',
@@ -97,10 +105,9 @@ export default defineComponent({
 
       await Promise.all([this.getPhoto()])
 
+      if (this.dialog) this.closeModal()
+
       this.dialog = value
-    },
-    closeModal () {
-      this.dialog = false
     },
     async getPhoto () {
       const peopleClient = new PeopleClient()
@@ -110,6 +117,29 @@ export default defineComponent({
       if (status === 200) {
         this.photo = URL.createObjectURL(data)
       }
+    },
+    async deleteFavorite () {
+      const contactStore = ContactStore()
+
+      SwalConfirm('Deseja realmente excluir dos favoritos ?')
+        .then(async (res) => {
+          if (res.isConfirmed) {
+            await contactStore.deleteFavorite(this.contato.id)
+              .then(async (res) => {
+                if (!res) return
+
+                await Promise.all([
+                  await contactStore.getFavorites(),
+                  await contactStore.getAll('')
+                ])
+
+                this.closeModal()
+              })
+          }
+        })
+    },
+    closeModal () {
+      this.dialog = false
     }
   }
 })
@@ -162,13 +192,17 @@ export default defineComponent({
 }
 
 .container {
-  width: 38vw;
+  width: 500px;
 }
 
 @media only screen and (max-width: 499px) {
   .modal {
-    height: 100vh;
-    width: 100vw;
+    width: 100%;
+
+    &__aside {
+      display: flex;
+      justify-content: center;
+    }
 
     &__footer {
       padding-bottom: 10px;
@@ -176,7 +210,7 @@ export default defineComponent({
   }
 
   .container {
-    width: 100%;
+    width: 250px;
   }
 }
 </style>

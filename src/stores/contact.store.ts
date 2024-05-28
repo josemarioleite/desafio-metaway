@@ -97,6 +97,22 @@ export const ContactStore = defineStore('contactStore', {
         this.setLoading(false)
       })
     },
+    async deleteFavorite (idContact: number) {
+      return new Promise(async (resolve) => {
+        this.setLoading(true)
+      
+        const { data, status } = await contactClient.deleteContact(idContact)
+
+        if (status === 200) {
+          SwalAlert(data.message)
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+
+        this.setLoading(false)
+      })
+    },
     setLoading (value: boolean) {
       return this.isLoading = value
     },
