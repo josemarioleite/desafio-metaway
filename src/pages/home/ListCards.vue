@@ -61,4 +61,12 @@ defineOptions({
     gap: 50px;
   }
 }
+
+@media only screen and (max-width: 499px) {
+  .list-cards {
+    &--title {
+      justify-content: center;
+    }
+  }
+}
 </style>

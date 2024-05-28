@@ -1,7 +1,7 @@
 <template>
-<div class="card-contact">
+<div class="card-contact" @click="showModalDetail">
   <div class="card-contact__header">
-    <v-avatar size="5rem" :style="{ background: colors }">
+    <v-avatar size="5rem" :style="{ backgroundColor: colors }">
       <span>{{ contact.pessoa.nome.substring(0, 1) }}</span>
     </v-avatar>
   </div>
@@ -12,6 +12,10 @@
     <span>Tipo: {{ traduzirContato(contact.tipoContato) }}</span>
     <span>{{ contact.tag }}</span>
   </div>
+
+  <template>
+    <CardModal ref="cardModal" />
+  </template>
 </div>
 </template>
 
@@ -19,6 +23,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { Contato } from '../../models/contact.model'
 import { generateColdColor, generateLightColor } from '../../services/utils'
+import CardModal from './CardModal.vue'
 
 interface Props {
   Contact: Contato
@@ -28,18 +33,24 @@ const props = defineProps<Props>()
 const contact = computed(() => props.Contact)
 const colors = ref<string[]>([])
 
+const cardModal = ref<typeof CardModal>()
 const tipoContato: { [key: string]: string } = {
-    EMAIL: 'E-mail',
-    TELEFONE: 'Telefone',
-    CELULAR: 'Celular'
+  EMAIL: 'E-mail',
+  TELEFONE: 'Telefone',
+  CELULAR: 'Celular'
 }
 
 function traduzirContato (tipo: string): string {
   return tipoContato[tipo.toUpperCase()]
 }
 
+function showModalDetail () {
+  cardModal.value.showModal(true, contact.value)
+}
+
 defineOptions({
-  name: 'Card-Contact'
+  name: 'Card-Contact',
+  components: {CardModal}
 })
 
 onMounted(() => {

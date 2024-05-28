@@ -3,7 +3,7 @@ import './registerServiceWorker'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createVuetify } from 'vuetify'
-import { VText, VTable, VFloatButton, VSelect } from './components/index'
+import { VText, VTable, VFloatButton, VSelect, VRead } from './components/index'
 
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import *  as components from 'vuetify/components'
@@ -26,6 +26,7 @@ createApp(App)
   .use(pinia)
   .directive('maska', vMaska)
   .component('c-float-button', VFloatButton)
+  .component('c-read', VRead)
   .component('c-text', VText)
   .component('c-table', VTable)
   .component('c-select', VSelect)
