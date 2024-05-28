@@ -23,14 +23,17 @@
 import { computed, ref, onMounted } from 'vue'
 import { Contato } from '../../models/contact.model'
 import { generateColdColor, generateLightColor } from '../../services/utils'
+import { TypeModal } from './ITypes'
 import CardModal from './CardModal.vue'
 
 interface Props {
-  Contact: Contato
+  Contact: Contato,
+  Type: TypeModal
 }
 
 const props = defineProps<Props>()
 const contact = computed(() => props.Contact)
+const type = computed(() => props.Type)
 const colors = ref<string[]>([])
 
 const cardModal = ref<typeof CardModal>()
@@ -45,7 +48,7 @@ function traduzirContato (tipo: string): string {
 }
 
 function showModalDetail () {
-  cardModal.value.showModal(true, contact.value)
+  cardModal.value.showModal(true, contact.value, type.value)
 }
 
 defineOptions({

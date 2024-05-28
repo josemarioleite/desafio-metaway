@@ -1,8 +1,8 @@
 <template>
 <div class="home">
-  <ListContacts Title="Favoritos" :Items="itemsFavorites" />
+  <ListContacts Title="Favoritos" :Items="itemsFavorites" Type="FAV" />
   <v-divider />
-  <ListContacts Title="Contatos" :Items="itemsContacts" />
+  <ListContacts Title="Contatos" :Items="itemsContacts" Type="CON" />
 </div>
 </template>
 

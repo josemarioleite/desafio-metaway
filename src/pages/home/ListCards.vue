@@ -6,7 +6,7 @@
 
   <div class="list-cards__item">
     <template v-for="(item, index) in Items" :key="index">
-      <CardContact :Contact="item" />
+      <CardContact :Contact="item" :Type="Type" />
     </template>
   </div>
 </div>
@@ -14,9 +14,11 @@
 
 <script lang="ts" setup>
 import CardContact from './CardContact.vue'
+import { TypeModal } from './ITypes'
 
 interface Props {
   Title: string
+  Type: TypeModal
   Items: []
 }
 
