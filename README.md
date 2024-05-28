@@ -14,3 +14,9 @@ Para acesso da aplicação acesse o link abaixo:
 ![image](https://github.com/josemarioleite/desafio-metaway/assets/31426252/1e3f2935-1472-4697-8cf2-8a5f390b3e76)
 
 ![image](https://github.com/josemarioleite/desafio-metaway/assets/31426252/be424833-7cb6-404e-88dd-20a738477896)
+
+
+## instalar e rodar a aplicação
+
+Para fazer a instalação: `npm install`
+Para rodar a aplicação: `npm run serve`
