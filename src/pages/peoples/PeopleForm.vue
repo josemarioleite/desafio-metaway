@@ -130,7 +130,8 @@ export default defineComponent({
   },
   methods: {
     async validateFields () {
-      const { valid } = await this.$refs.vForm.validate()
+      const form: any = this.$refs.vForm
+      const { valid } = await form.validate()
 
       return valid
     },
