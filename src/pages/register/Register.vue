@@ -2,7 +2,7 @@
   <div class="register">
     <span class="title-page">Meu Cadastro</span>
 
-    <v-form class="register__form">
+    <v-form class="register__form" ref="vForm">
       <v-container>
         <v-row>
           <v-col cols="12" md="3">
@@ -12,22 +12,22 @@
             <c-text v-model="permissaoUsuario" label="Permissão" readonly :loading="isLoading" :clearable="false" />
           </v-col>
           <v-col cols="12" md="6">
-            <c-text v-model="usuarioLogado.nome" label="Nome" :loading="isLoading" />
+            <c-text v-model="usuarioLogado.nome" label="Nome" :loading="isLoading" :rules="nameUserRules" />
           </v-col>
           <v-col cols="12" md="4">
-            <c-text v-model.trim="usuarioLogado.cpf" label="CPF" :loading="isLoading" v-maska:[maskCPF] />
+            <c-text v-model="usuarioLogado.cpf" label="CPF" :loading="isLoading" v-maska:[maskCPF] :rules="cpfRules" />
           </v-col>
           <v-col cols="12" md="4">
-            <c-text v-model="usuarioLogado.dataNascimento" label="Data de Nascimento" :loading="isLoading" v-maska:[maskDate] />
+            <c-text v-model="usuarioLogado.dataNascimento" label="Data de Nascimento" :loading="isLoading" v-maska:[maskDate] :rules="dataNascimentoRules" />
           </v-col>
           <v-col cols="12" md="4">
-            <c-text v-model="usuarioLogado.telefone" label="Contato" :loading="isLoading" v-maska:[maskTelephone] />
+            <c-text v-model="usuarioLogado.telefone" label="Contato" :loading="isLoading" v-maska:[maskTelephone] :rules="telefoneRules" />
           </v-col>
           <v-col cols="12" md="5">
-            <c-text v-model="usuarioLogado.username" label="Usuário" :loading="isLoading" />
+            <c-text v-model="usuarioLogado.username" label="Usuário" :loading="isLoading" :rules="nameUserRules" />
           </v-col>
           <v-col cols="12" md="7">
-            <c-text v-model="usuarioLogado.email" label="E-mail" :loading="isLoading" />
+            <c-text v-model="usuarioLogado.email" label="E-mail" :loading="isLoading" :rules="emailRules" />
           </v-col>
         </v-row>
         <div class="register__form__btn">
@@ -40,49 +40,80 @@
   </div>
 </template>
 
-
-<script lang="ts" setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+<script>
+import { defineComponent } from 'vue'
+import { computed, reactive } from 'vue'
 import { UserStore } from '../../stores/user.store'
-import { vMaska } from 'maska'
-import { SwalConfirm } from '../../services/utils'
+import { SwalConfirm, isValidEmail } from '../../services/utils'
 import ChangePassword from './ChangePassword.vue'
 
-const maskCPF = reactive({ mask: '###.###.###-##', eager: true })
-const maskTelephone = reactive({ mask: '(##)# ####-####', eager: true })
-const maskDate = reactive({ mask: '##/##/####', eager: true })
-
-const userStore = UserStore()
-const isLoading = computed(() => userStore.isLoading)
-const usuarioLogado = computed(() => userStore.usuarioLogado)
-const permissaoUsuario = computed(() => userStore.permissoes)
-
-const changePW = ref(null)
-
-async function updateUser () {
-  SwalConfirm('Deseja realmente fazer a alteração')
-    .then(async (result) => {
-      if (result.isConfirmed) {
-        await userStore.updateUser()
-      }
-    })
-}
-
-async function updatePage () {
-  await userStore.getDetailUserLogged()
-}
-
-function changePassword () {
-  return changePW.value.showDialog(true)
-}
-
-defineOptions({
+export default defineComponent({
   name: 'Register',
-  components: { ChangePassword }
-})
+  components: { ChangePassword },
+  data: () => ({
+    nameUserRules: [
+      v => !!v || 'Campo Obrigatório',
+      v => (v && v.length > 2) || 'Mínimo 3 caracteres'
+    ],
+    cpfRules: [
+      v => !!v || 'Campo Obrigatório',
+      v => (v && v.length > 13) || 'Preencha corretamente'
+    ],
+    dataNascimentoRules: [
+      v => !!v || 'Campo Obrigatório',
+      v => (v && v.length > 9) || 'Preencha corretamente'
+    ],
+    telefoneRules: [
+      v => !!v || 'Campo Obrigatório',
+      v => (v && v.length > 13) || 'Preencha corretamente'
+    ],
+    emailRules: [
+      v => !!v || 'Campo Obrigatório',
+      v => isValidEmail(v) || 'Preencha corretamente'
+    ]
+  }),
+  setup () {
+    const userStore = UserStore()
 
-onMounted (async () => {
-  await updatePage()
+    const maskCPF = reactive({ mask: '###.###.###-##', eager: true })
+    const maskTelephone = reactive({ mask: ['(##) #####-####', '(##) ####-####'], eager: true })
+    const maskDate = reactive({ mask: '##/##/####', eager: true })
+
+    const isLoading = computed(() => userStore.isLoading)
+    const usuarioLogado = computed(() => userStore.usuarioLogado)
+    const permissaoUsuario = computed(() => userStore.permissoes)
+
+    return {
+      maskCPF, maskTelephone, maskDate,
+      userStore, isLoading, usuarioLogado, permissaoUsuario
+    }
+  },
+  methods: {
+    changePassword () {
+      return this.$refs.changePW.showDialog(true)
+    },
+    async validFields () {
+      const { valid } = await this.$refs.vForm.validate()
+
+      return valid
+    },
+    async updatePage () {
+      await this.userStore.getDetailUserLogged()
+    },
+    async updateUser () {
+      if (await this.validFields()) {
+        SwalConfirm('Deseja realmente fazer a alteração')
+          .then(async (result) => {
+            if (result.isConfirmed) {
+              await this.userStore.updateUser()
+            }
+          })
+      }
+    }
+  },
+  async mounted () {
+    await this.updatePage()
+  }
 })
 </script>
 
@@ -103,6 +134,7 @@ onMounted (async () => {
       display: flex;
       gap: 10px;
       justify-content: flex-end;
+      margin-top: 10px;
     }
   }
 }

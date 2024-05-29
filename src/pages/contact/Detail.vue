@@ -67,7 +67,7 @@ import { PeopleStore } from '../../stores/people.store'
 import { UserStore } from '../../stores/user.store'
 import { ContactStore } from '../../stores/contact.store'
 import { SwalAlert, SwalConfirm, isValidEmail } from '../../services/utils'
-import { Contato, CreateEmptyContact } from '../../models/contact.model'
+import { CreateEmptyContact } from '../../models/contact.model'
 
 interface Props {
   Show: boolean
